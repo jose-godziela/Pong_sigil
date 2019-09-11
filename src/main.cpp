@@ -19,6 +19,11 @@ float J1recX = screenWidth / 15;
 float J1recY = screenHeight / 2;
 float J2recX = screenWidth - (screenWidth / 17);
 float J2recY = screenHeight / 2;
+float J1TopY = J1recY - (J1recY / 2);
+float J1BotY = J1recY + (J1recY / 2);
+float J2TopY = J2recY - (J2recY / 2);
+float J2BotY = J2recY + (J2recY / 2);
+
 float circleX = screenWidth / 2;
 float circleY = screenWidth / 2;
 bool movVert = false;
@@ -48,14 +53,26 @@ int main()
 		slCircleFill(circleX, circleY, radius, 15);
 
 		//Movement
-		if (slGetKey('W'))
+		if (slGetKey('W')) {
 			J1recY += speed;
-		if (slGetKey('S'))
-			J1recY -= speed;	
-		if (slGetKey(SL_KEY_UP))
+			J1TopY = J1recY - (J1recY / 2);
+			J1BotY = J1recY + (J1recY / 2);
+		}
+		if (slGetKey('S')) {
+			J1recY -= speed;
+			J1TopY = J1recY - (J1recY / 2);
+			J1BotY = J1recY + (J1recY / 2);
+		}
+		if (slGetKey(SL_KEY_UP)) {
 			J2recY += speed;
-		if (slGetKey(SL_KEY_DOWN))
+			J2TopY = J1recY - (J1recY / 2);
+			J2BotY = J1recY + (J1recY / 2);
+		}
+		if (slGetKey(SL_KEY_DOWN)) {
 			J2recY -= speed;
+			J2TopY = J1recY - (J1recY / 2);
+			J2BotY = J1recY + (J1recY / 2);
+		}
 		//Limit
 		if (J1recY >= screenHeight - (recHeight / 2))
 			J1recY = screenHeight - (recHeight / 2);
@@ -77,9 +94,9 @@ int main()
 
 		if (circleX <= radius)
 			movHor = true;
-		if (circleX <= J1recX + radius && circleY == J1recY)
-			movHor = true;
-		if (circleX >= J2recX - radius && circleY == J2recY)
+		if (circleX <= J1recX + radius && (circleY == J1recY|| circleY == J1TopY || circleY == J1BotY))
+			movHor = true;									
+		if (circleX >= J2recX - radius && (circleY == J2recY || circleY <= J2TopY && circleY >= J2BotY))
 			movHor = false;
 		if (circleX >= screenWidth - radius)
 			movHor = false;
